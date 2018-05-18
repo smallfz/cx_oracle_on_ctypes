@@ -350,14 +350,15 @@ of dictionaries."""
         # rowcount is not row_count because it is public interface
 
         if self.statement_type == oci.OCI_STMT_SELECT:
-            self.rowcount = 0
+            self.rowcount = 0 # OCIAttrGet(self.handle, oci.OCI_HTYPE_STMT, oci.ub4, oci.OCI_ATTR_ROW_COUNT, self.environment, "Cursor_SetRowCount()")
             self.actual_rows = -1 # not public interface
             self.row_num = 0
         else:
-            if self.statement_type in (oci.OCI_STMT_INSERT, oci.OCI_STMT_UPDATE, oci.OCI_STMT_DELETE):
-                self.rowcount = OCIAttrGet(self.handle, oci.OCI_HTYPE_STMT, oci.ub4, oci.OCI_ATTR_ROW_COUNT, self.environment, "Cursor_SetRowCount()")
-            else:
-                self.rowcount = -1
+            # if self.statement_type in (oci.OCI_STMT_INSERT, oci.OCI_STMT_UPDATE, oci.OCI_STMT_DELETE):
+            #     self.rowcount = OCIAttrGet(self.handle, oci.OCI_HTYPE_STMT, oci.ub4, oci.OCI_ATTR_ROW_COUNT, self.environment, "Cursor_SetRowCount()")
+            # else:
+            #     self.rowcount = -1
+            self.rowcount = OCIAttrGet(self.handle, oci.OCI_HTYPE_STMT, oci.ub4, oci.OCI_ATTR_ROWS_FETCHED, self.environment, "Cursor_SetRowCount()")
 
     def perform_bind(self):
         """Perform the binds on the cursor."""
